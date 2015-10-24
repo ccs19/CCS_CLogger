@@ -39,7 +39,7 @@ limitations under the License.
 
 
 /**Settings**/
-#define CCS_LOGS_LEVEL 0
+#define CCS_LOGS_LEVEL 4
 
 
 #include <string.h>
@@ -52,58 +52,53 @@ static int CCS_CLogger_initialized = 0;
 //or you should be using a more robust logging system :-)
 static const int CCS_CLogger_BUFFER_SIZE = 1024;
 
-static const char* CCS_CLogger_LOGGER_FORMAT = "[%ld] %s:%d [%s] %s\n";
+static const char *CCS_CLogger_LOGGER_FORMAT = "[%ld] %s:%d [%s] %s\n";
 
-static long long getTimeMilliseconds(){
+static long long getTimeMilliseconds() {
     struct timeval te;
     gettimeofday(&te, NULL);
-    long long milliseconds = te.tv_sec*1000LL + te.tv_usec/1000;
+    long long milliseconds = te.tv_sec * 1000LL + te.tv_usec / 1000;
     return milliseconds;
 }
 
-static void initStartTime(void){
-    if(!CCS_CLogger_initialized){
+static void initStartTime(void) {
+    if (!CCS_CLogger_initialized) {
         CCS_CLogger_programStartTime = getTimeMilliseconds();
         CCS_CLogger_initialized = 1;
     }
 }
 
-static void makeMessage(FILE* output, const char *tag, const char* func,  const int line, const char* format, ...){
+static void makeMessage(FILE *output, const char *tag, const char *func, const int line, const char *format, ...) {
     char arr[CCS_CLogger_BUFFER_SIZE];
     va_list args;
     va_start(args, format);
     long long now = getTimeMilliseconds() - CCS_CLogger_programStartTime;
-    const char* loggerFormat = "[%ld] %s:%d [%s] %s\n"; //[time] func:line [tag] <msg> (msg exists from format and va_list args)
+    const char *loggerFormat = "[%ld] %s:%d [%s] %s\n"; //[time] func:line [tag] <msg> (msg exists from format and va_list args)
     snprintf(arr, CCS_CLogger_BUFFER_SIZE, loggerFormat, now, func, line, tag, format);
     vfprintf(output, arr, args);
     va_end(args);
     fflush(output);
 }
 
-
-
+/**empty defines if logging disabled**/
+#define LogE(fmt, ...)
+#define LogW(fmt, ...)
+#define LogD(fmt, ...)
+#define LogI(fmt, ...)
 
 #if(CCS_LOGS_LEVEL >= 1)
 #define LogE(fmt, ...)  makeMessage(stderr, "ERROR", __func__, __LINE__, fmt, ##__VA_ARGS__)
 #else
-#define LogE(fmt, ...)
 #endif
 #if(CCS_LOGS_LEVEL >= 2)
 #define LogW(fmt, ...)  makeMessage(stderr, "WARN", __func__, __LINE__, fmt, ##__VA_ARGS__)
 #else
-#define LogW(fmt, ...)
 #endif
 #if(CCS_LOGS_LEVEL >= 3)
 #define LogD(fmt, ...) makeMessage(stdout, "DEBUG", __func__, __LINE__, fmt, ##__VA_ARGS__)
 #else
-#define LogD(fmt, ...)
 #endif
 #if(CCS_LOGS_LEVEL >= 4)
 #define LogI(fmt, ...)  makeMessage(stdout, "INFO", __func__, __LINE__, fmt, ##__VA_ARGS__)
-#else
-#define LogI(fmt, ...)
 #endif
-
 #endif //CCS_CLOGGER_H
-
-
