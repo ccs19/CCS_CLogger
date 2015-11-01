@@ -36,6 +36,12 @@ limitations under the License.
 #ifndef CCS_CLOGGER_H
 #define CCS_CLOGGER_H
 
+#include <stddef.h>
+#include <stdio.h>
+#include <stdarg.h>     /* va_list, va_start, va_arg, va_end */
+#include <sys/time.h>
+
+
 /**Settings**/
 #define CCS_LOGS_LEVEL 3
 
