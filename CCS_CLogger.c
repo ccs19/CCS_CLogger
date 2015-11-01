@@ -14,11 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 **/
 
-
-#include <stddef.h>
-#include <stdio.h>
-#include <stdarg.h>     /* va_list, va_start, va_arg, va_end */
-#include <sys/time.h>
 #include "CCS_CLogger.h"
 
 long long CCS_CLogger_programStartTime;
