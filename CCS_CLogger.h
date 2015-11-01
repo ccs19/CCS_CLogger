@@ -37,7 +37,6 @@ limitations under the License.
 #ifndef CCS_CLOGGER_H
 #define CCS_CLOGGER_H
 
-
 /**Settings**/
 #define CCS_LOGS_LEVEL 4
 
@@ -87,18 +86,25 @@ static void makeMessage(FILE *output, const char *tag, const char *func, const i
 #define LogI(fmt, ...)
 
 #if(CCS_LOGS_LEVEL >= 1)
+#undef LogE
 #define LogE(fmt, ...)  makeMessage(stderr, "ERROR", __func__, __LINE__, fmt, ##__VA_ARGS__)
 #else
 #endif
 #if(CCS_LOGS_LEVEL >= 2)
+#undef LogW
 #define LogW(fmt, ...)  makeMessage(stderr, "WARN", __func__, __LINE__, fmt, ##__VA_ARGS__)
 #else
 #endif
 #if(CCS_LOGS_LEVEL >= 3)
+#undef LogD
 #define LogD(fmt, ...) makeMessage(stdout, "DEBUG", __func__, __LINE__, fmt, ##__VA_ARGS__)
 #else
 #endif
 #if(CCS_LOGS_LEVEL >= 4)
+#undef LogI
 #define LogI(fmt, ...)  makeMessage(stdout, "INFO", __func__, __LINE__, fmt, ##__VA_ARGS__)
 #endif
+
 #endif //CCS_CLOGGER_H
+
+
